@@ -13,7 +13,7 @@ def data_cacher(method: Callable) -> Callable:
     '''Caches the output of fetched data.
     '''
     @wraps(method)
-    def invoker(url) -> str:
+    def wrapper(url) -> str:
         '''The wrapper function for caching the output.
         '''
         r.incr(f'count:{url}')
@@ -24,7 +24,7 @@ def data_cacher(method: Callable) -> Callable:
         r.set(f'count:{url}', 0)
         r.setex(f'result:{url}', 10, result)
         return result
-    return invoker
+    return wrapper
 
 
 @data_cacher
