@@ -12,9 +12,9 @@ def count_calls(fun: Callable) -> Callable:
     def wrapper(self, *args, **kwargs):
         """wrapper function"""
         self._redis.incr(fun.__qualname__)
-
         return fun(self, *args, **kwargs)
     return wrapper
+
 
 class Cache:
     """Class Cache"""
@@ -30,12 +30,15 @@ class Cache:
 
         return key
 
-    def get(self, key: str, fn: Callable = None) -> Union[str, bytes, int, float]:
+    def get(self, key: str, fn: Callable = None) -> Union[str,
+                                                          bytes,
+                                                          int,
+                                                          float]:
         """Get data from redis"""
         if fn is None:
             return self._redis.get(key)
         return fn(self._redis.get(key))
-    
+
     def get_str(self, key: str) -> str:
         """Get data from redis as a string"""
         return self.get(key, str)
