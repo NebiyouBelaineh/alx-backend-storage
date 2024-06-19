@@ -3,16 +3,16 @@
 import redis
 from uuid import uuid4
 from typing import Union, Callable
-import functools
+from functools import wraps
 
 
-def count_calls(fun: Callable) -> Callable:
-    """Decorator that counts calls"""
-    @functools.wraps(fun)
+def count_calls(method: Callable) -> Callable:
+    """Decorator that counts calls of Cache.store"""
+    @wraps(method)
     def wrapper(self, *args, **kwargs):
         """wrapper function"""
-        self._redis.incr(fun.__qualname__)
-        return fun(self, *args, **kwargs)
+        self._redis.incr(method.__qualname__)
+        return method(self, *args, **kwargs)
     return wrapper
 
 
